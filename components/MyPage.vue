@@ -15,7 +15,10 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('auth', ['isLoggedIn'])
+    ...mapGetters({
+      isAuthenticated: 'auth/isAuthenticated',
+      isLoggedIn: 'auth/isLoggedIn'
+    })
   },
   mounted() {
     if (!this.isAuthenticated) {

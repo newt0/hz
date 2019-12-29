@@ -3,31 +3,38 @@ import { auth } from '~/plugins/firebase'
 export const state = () => ({
   status: '',
   token: localStorage.getItem('token') || '', // I'm not sure that whether this is necessary or not.
-  username: ''
+  user: null
 })
 
 export const getters = {
-  isLoggedIn: (state) => state.status === 'loggedIn'
+  currentUser(state) {
+    return state.user
+  },
+  isAuthenticated(state) {
+    return state.user != null
+  },
+  isLoggedIn(state) {
+    return state.status === 'loggedIn'
+  }
 }
 
 export const actions = {
-  gotUser({ commit }, user) {
-    commit('setUser', user)
+  async logout({ dispatch, commit }, data) {
+    await auth.signOut()
+    commit('unSetUser')
   },
-  logout({ commit }) {
-    auth.signOut().then(() => {
-      commit('logout')
-    })
+  setUser({ commit }, user) {
+    commit('setUser', user)
   }
 }
 
 export const mutations = {
   setUser(state, user) {
     state.status = 'loggedIn'
-    state.username = user.displayName
+    state.user = user
   },
-  logout(state) {
+  unSetUser() {
     state.status = 'loggedOut'
-    state.username = ''
+    state.user = null
   }
 }

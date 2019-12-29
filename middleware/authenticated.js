@@ -1,13 +1,11 @@
-import { auth } from '~/plugins/firebase.js'
+import { auth } from '~/plugins/firebase'
 
-export default function({ route, store, redirect }) {
-  auth.onAuthStateChanged((user) => {
+export default async function({ store, route, redirect }) {
+  await auth.onAuthStateChanged((user) => {
     if (user) {
-      if (route.name === 'login') redirect('/')
-      store.dispatch('auth/gotUser', user)
+      // if (route.name === 'login') redirect('/')
+      store.dispatch('auth/setUser', user)
       // store.dispatch('auth/logout')
-    } else {
-      if (route.name !== 'login') redirect('/login')
     }
   })
 }

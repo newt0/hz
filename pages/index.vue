@@ -1,49 +1,68 @@
-<template>  
-  <section class="container">
-    <header />
-    <p>{{ username }}</p>
-    <div>
-      <app-logo />
-      <h1 class="title">
-        {{name}}
-      </h1>
-      <h2 class="subtitle">
-        Nuxt.jsとFirebaseを使って簡単なWebサービスを作るテストです。
-      </h2>
-    </div>
-  </section>
+<template>
+  <v-app id="inspire">
+    <Header />
+    <v-content>
+      <v-container class="fill-height" fluid>
+        <v-row align="center" justify="center">
+          <v-col class="text-center">
+            <v-tooltip left>
+              <template v-slot:activator="{ on }">
+                <v-btn :href="source" v-on="on" icon large target="_blank">
+                  <v-icon large>mdi-code-tags</v-icon>
+                </v-btn>
+              </template>
+              <span>Source</span>
+            </v-tooltip>
+
+            <v-tooltip right>
+              <template v-slot:activator="{ on }">
+                <v-btn
+                  icon
+                  large
+                  href="https://codepen.io/johnjleider/pen/zgxeLQ"
+                  target="_blank"
+                  v-on="on"
+                >
+                  <v-icon large>mdi-codepen</v-icon>
+                </v-btn>
+              </template>
+              <span>Codepen</span>
+            </v-tooltip>
+          </v-col>
+        </v-row>
+      </v-container>
+    </v-content>
+    <Footer />
+  </v-app>
 </template>
 
 <script>
-import AppLogo from '@/components/AppLogo.vue'
-import Header from '@/components/Header.vue'
-import auth from '@/plugins/firebase'
-import Home from '@/components/Home.vue'
-import Mypage from '@/components/Mypage.vue'
-import { log } from 'util'
 import { mapState, mapGetters, mapActions } from 'vuex'
+import Header from '@/components/Header.vue'
+import Footer from '@/components/Footer.vue'
+import { log } from 'util'
 
 export default {
   components: {
-    AppLogo,
     Header,
-    Home,
-    Mypage
+    Footer
   },
-  asyncData (context) {
-    // コンポーネントをロードする前に毎回呼び出されます
-    return { name: 'Hello, World！！', isLogin: false, userData: null}
+  props: {
+    source: String
   },
+  data: () => ({}),
   computed: {
-    ...mapState('auth', ['username']),
+    ...mapState('auth', ['user']),
     ...mapGetters('auth', ['isLoggedIn'])
   },
-  fetch () {
+  asyncData(context) {
+    // コンポーネントをロードする前に毎回呼び出されます
+  },
+  fetch() {
     // `fetch` メソッドはページの描画前にストアを満たすために使用されます
   },
-  mounted: function() {
-  },
-  methods: {
+  created() {
+    this.$vuetify.theme.dark = true
   }
 }
 </script>
