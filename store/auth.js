@@ -2,7 +2,6 @@ import { auth } from '~/plugins/firebase'
 
 export const state = () => ({
   status: '',
-  token: localStorage.getItem('token') || '', // I'm not sure that whether this is necessary or not.
   user: null
 })
 
@@ -20,8 +19,14 @@ export const getters = {
 
 export const actions = {
   async logout({ dispatch, commit }, data) {
-    await auth.signOut()
-    commit('unSetUser')
+    // TODO: [My guess] Replacement this with middleware, is better
+    try {
+      await auth.signOut()
+      commit('unSetUser')
+      window.location.href = '/'
+    } catch (err) {
+      window.console.log('Logout error: ', err)
+    }
   },
   setUser({ commit }, user) {
     commit('setUser', user)

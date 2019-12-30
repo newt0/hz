@@ -3,7 +3,6 @@
 </template>
 
 <script>
-import { log } from 'util'
 import * as firebaseui from 'firebaseui'
 import { auth, authProviders } from '~/plugins/firebase'
 
@@ -22,17 +21,14 @@ export default {
             // 本番環境では不要
             signInSuccessWithAuthResult: (authResult) => {
               window.location.href = '/'
-              return false // falseを設定するとsignInSuccessUrlにはリダイレクトしない
+              return false // false を設定すると signInSuccessUrl にはリダイレクトしない
             }
           },
           signInSuccessUrl: '/',
-          signInFlow: 'popup' // ログインフロー設定。Nuxtのローカルサーバーで起こるCORSエラーがあるのでpopupがオススメです。
+          signInFlow: 'popup' // ログインフロー設定: Nuxt のローカルサーバーで起こる CORS エラーがあるので popup 推奨
         }
 
         ui.start('#firebaseui-auth-container', config)
-      } else {
-        log('Got user')
-        log(user)
       }
     })
   }
