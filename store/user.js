@@ -1,33 +1,28 @@
-// export const state = () => ({
-//   email: '',
-//   displayName: ''
-// })
+/// 現状は store/auth.js で
+/// user オブジェクトを管理しているから、
+/// このファイルは利用しない
 
-// export const actions = {
-//   login({ commit }, user) {
-//     commit('setEmail', user.email)
-//     commit('setDisplayName', user.displayName)
-//   },
-//   logout({ commit }) {
-//     commit('setEmail', '')
-//     commit('setDisplayName', '')
-//   }
-// }
+export const state = () => ({
+  displayName: ''
+})
 
-// export const mutations = {
-//   setEmail(state, email) {
-//     state.email = email
-//   },
-//   setDisplayName(state, displayName) {
-//     state.displayName = displayName
-//   }
-// }
+export const actions = {
+  login({ commit }, user) {
+    commit('setDisplayName', user.displayName)
+  },
+  logout({ commit }) {
+    commit('setDisplayName', '')
+  }
+}
 
-// export const getters = {
-//   isLogin: (state) => {
-//     return !!state.email
-//   },
-//   displayName: (state) => {
-//     return state.displayName
-//   }
-// }
+export const mutations = {
+  setDisplayName(state, displayName) {
+    state.displayName = displayName
+  }
+}
+
+export const getters = {
+  displayName: (state) => {
+    return state.displayName
+  }
+}

@@ -49,7 +49,7 @@
     </v-navigation-drawer>
     <v-app-bar app color="light-green" dark>
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
-      <v-toolbar-title>Hz Healing Music</v-toolbar-title>
+      <v-toolbar-title>hz - Solfeggio Harmonics Music</v-toolbar-title>
     </v-app-bar>
   </div>
 </template>

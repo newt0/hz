@@ -27,7 +27,7 @@ export default {
   /*
    ** Plugins to load before mounting the App
    */
-  plugins: [],
+  plugins: ['~/plugins/vue-youtube.js'],
   /*
    ** Nuxt.js dev-modules
    */
@@ -39,7 +39,7 @@ export default {
   /*
    ** Nuxt.js modules
    */
-  modules: ['@nuxtjs/vuetify'],
+  modules: ['@nuxtjs/vuetify', '@nuxtjs/axios'],
   /*
    ** Build configuration
    */
@@ -52,5 +52,6 @@ export default {
   router: {
     base: '/',
     middleware: ['authenticated']
-  }
+  },
+  axios: {}
 }

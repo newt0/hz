@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid>
+  <v-container>
     <v-card class="mx-auto" max-width="800">
       <v-card-title class="title font-weight-regular justify-space-between">
         <span>Login</span>

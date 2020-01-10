@@ -8,20 +8,17 @@
       </v-card-text>
 
       <v-card-text class="white--text pt-0">
-        Phasellus feugiat arcu sapien, et iaculis ipsum elementum sit amet.
-        Mauris cursus commodo interdum. Praesent ut risus eget metus luctus
-        accumsan id ultrices nunc. Sed at orci sed massa consectetur dignissim 
-        a sit amet dui. Duis commodo vitae velit et faucibus. Morbi vehicula 
-        lacinia malesuada. Nulla placerat augue vel ipsum ultrices, 
-        cursus iaculis dui sollicitudin. Vestibulum eu ipsum vel diam 
-        elementum tempor vel ut orci. Orci varius natoque penatibus et 
-        magnis dis parturient montes, nascetur ridiculus mus.
+        ソルフェジオ周波数とは、レオナルド・G・ホロウィッツが著書の中で提唱した、
+        396Hz、417Hz、528Hz、639Hz、741Hz、852Hz の 6
+        種類から構成される音階のことです。現在では、周波数の差が
+        111という計算から導かれた、174Hz、285Hz、936Hz を加えた 9 種類を、
+        ソルフェジオ周波数と呼ぶことが主流となっています。
       </v-card-text>
 
       <v-divider></v-divider>
 
       <v-card-text class="white--text">
-        {{ new Date().getFullYear() }} — <strong>Hz Healing Music</strong>
+        {{ new Date().getFullYear() }} — <strong>hz</strong>
       </v-card-text>
     </v-card>
   </v-footer>
