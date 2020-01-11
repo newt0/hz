@@ -19,24 +19,27 @@ export const mutations = {
 
 export const actions = {
   async getVideos({ commit }, payload) {
-    const searchUrl = 'https://www.googleapis.com/youtube/v3/search'
+    const videoPart = 'snippet'
+    const maxResultsNumber = 9
     const requestParams = {
-      key: 'AIzaSyAKd9n12LheN4E0ZprTreXRl-fNt9jM-_I',
-      part: 'snippet',
+      key: process.env.YT_API_KEY,
+      part: videoPart,
       q: payload.keyword,
-      maxResults: 9
+      maxResults: maxResultsNumber
     }
     const requestHeaders = {
       'Content-Type': 'application/json'
     }
 
     // リクエスト送信
+    const methodName = 'get'
+    const timeoutTime = 15000
     const videos = await axios
-      .get(searchUrl, {
+      .get(process.env.YT_SEARCH_API_BASE_URL, {
         params: requestParams,
-        method: 'get',
+        method: methodName,
         headers: requestHeaders,
-        timeout: 15000
+        timeout: timeoutTime
       })
       .then(function(res) {
         return res.data
