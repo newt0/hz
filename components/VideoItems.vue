@@ -1,17 +1,22 @@
 <template>
   <v-item-group>
     <v-container>
-      <p>bbb</p>
       <v-row>
+        <!-- TODO: $store.state.video.items を 
+          mapStates で定義した `VideoItems` から取得したい -->
         <v-col
-          v-for="(item, key, index) in videoItems"
+          v-for="(item, key, index) in $store.state.video.items.items"
           :key="index"
           cols="12"
           md="4"
         >
-          <p>aaa</p>
-          <youtube ref="youtube" :video-id="item.id.videoId" />
-          <p>Title here. Title here. Title here. Title here. Title here.</p>
+          <youtube
+            ref="youtube"
+            :video-id="item.id.videoId"
+            :width="videoWidth"
+            :height="videoHeight"
+          />
+          <p>{{ item.snippet.title }}</p>
         </v-col>
       </v-row>
     </v-container>
@@ -19,21 +24,25 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
-
 export default {
   name: 'VideoItems',
-  computed: {
-    ...mapState({
-      // selectedHz: 'index/selectedHz',
-      videoItems: 'video/items'
-    })
+  data() {
+    return {
+      videoWidth: 288,
+      videoHeight: 162,
+      searchKeyword:
+        this.$store.state.selectedHz + 'Hz music' || 'Solfeggio Harmonics Music'
+    }
   },
-  async asyncData({ store }) {
-    window.console.log(store.state.selectedHz)
-    await store.dispatch('video/getVideos', {
-      keyword: store.state.selectedHz
-    })
+  created() {
+    this.getVideos()
+  },
+  methods: {
+    getVideos() {
+      this.$store.dispatch('video/getVideos', {
+        keyword: this.searchKeyword
+      })
+    }
   }
 }
 </script>
