@@ -17,6 +17,11 @@
             :height="videoHeight"
           />
           <p>{{ item.snippet.title }}</p>
+          <p>
+            <v-icon @click="clickFavoriteIcon(item.id.videoId)">
+              mdi mdi-heart
+            </v-icon>
+          </p>
         </v-col>
       </v-row>
     </v-container>
@@ -24,6 +29,8 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
+
 export default {
   name: 'VideoItems',
   data() {
@@ -34,6 +41,9 @@ export default {
         this.$store.state.selectedHz + 'Hz music' || 'Solfeggio Harmonics Music'
     }
   },
+  computed: {
+    ...mapActions(['favorites/addFavorite'])
+  },
   created() {
     this.getVideos()
   },
@@ -42,6 +52,10 @@ export default {
       this.$store.dispatch('video/getVideos', {
         keyword: this.searchKeyword
       })
+    },
+    clickFavoriteIcon(videoId) {
+      window.console.log(videoId)
+      this.$store.dispatch('favorites/addFavorite', videoId)
     }
   }
 }

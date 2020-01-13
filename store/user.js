@@ -1,28 +1,48 @@
-/// 現状は store/auth.js で
-/// user オブジェクトを管理しているから、
-/// このファイルは利用しない
+import firebase from '~/plugins/firebase'
+
+const firestore = firebase.firestore()
+const userRef = firestore.collection('users')
 
 export const state = () => ({
-  displayName: ''
+  userUid: '',
+  userDisplayName: ''
 })
 
 export const actions = {
-  login({ commit }, user) {
-    commit('setDisplayName', user.displayName)
+  setUserUid({ commit, userUid }) {
+    commit('setUserUid', userUid)
   },
-  logout({ commit }) {
-    commit('setDisplayName', '')
+  setUserDisplayName({ commit, userDisplayName }) {
+    commit('setUserDisplayName', userDisplayName)
+  },
+  async setUser({ commit }, user) {
+    await userRef
+      .doc(user.uid)
+      .set({ uid: user.uid, displayName: user.displayName }, { merge: true })
+      .then(function(res) {
+        commit('setUserUid', user.uid)
+        commit('setUserDisplayName', user.displayName)
+      })
+      .catch(function(error) {
+        window.console.error('Error User-Data adding document: ', error)
+      })
   }
 }
 
 export const mutations = {
-  setDisplayName(state, displayName) {
-    state.displayName = displayName
+  setUserDisplayName(state, userDisplayName) {
+    state.userDisplayName = userDisplayName
+  },
+  setUserUid(state, userUid) {
+    state.userUid = userUid
   }
 }
 
 export const getters = {
+  userUid: (state) => {
+    return state.userUid
+  },
   displayName: (state) => {
-    return state.displayName
+    return state.userDisplayName
   }
 }

@@ -1,5 +1,4 @@
-import firebase from 'firebase/app'
-import 'firebase/auth'
+import firebase from 'firebase'
 
 if (!firebase.apps.length) {
   firebase.initializeApp({
@@ -18,4 +17,5 @@ export const authProviders = {
   Google: firebase.auth.GoogleAuthProvider.PROVIDER_ID
 }
 
+export default firebase
 export const auth = firebase.auth()

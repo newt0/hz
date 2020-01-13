@@ -1,3 +1,5 @@
+// 次回の実装：users/addUserをコールする
+
 import { auth } from '~/plugins/firebase'
 
 export const state = () => ({
@@ -28,8 +30,10 @@ export const actions = {
       window.console.log('Logout error: ', err)
     }
   },
-  setUser({ commit }, user) {
+  setUser({ dispatch, commit }, user) {
+    // TODO: ここの setUser を利用しないように修正したい
     commit('setUser', user)
+    dispatch('user/setUser', user, { root: true })
   }
 }
 
