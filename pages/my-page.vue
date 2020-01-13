@@ -1,16 +1,22 @@
 <template>
-  <members-only>
-    <h1>ログインしていないと見れないページ</h1>
-    <a href="/">Home</a>
-  </members-only>
+  <FavoriteList />
 </template>
 
 <script>
-import MyPage from '@/components/MyPage.vue'
+import { mapGetters } from 'vuex'
+import FavoriteList from '@/components/FavoriteList.vue'
 
 export default {
   components: {
-    MyPage
+    FavoriteList
+  },
+  computed: {
+    ...mapGetters(['auth/isAuthenticated', 'auth/isLoggedIn'])
+  },
+  mounted() {
+    // if (!this.isAuthenticated) {
+    //   this.$router.push('/')
+    // }
   }
 }
 </script>

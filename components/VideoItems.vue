@@ -54,7 +54,6 @@ export default {
       })
     },
     clickFavoriteIcon(videoId) {
-      window.console.log(videoId)
       this.$store.dispatch('favorites/addFavorite', videoId)
     }
   }

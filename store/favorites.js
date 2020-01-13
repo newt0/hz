@@ -10,11 +10,12 @@ export const state = () => ({
 })
 
 export const mutations = {
-  setFavorites(state, items) {
-    state.favorites = items
-  },
-  addFavorite(state, favorite) {
-    state.favorites.push(favorite)
+  setFavorites(state, favoriteId) {
+    if (state.favorites.includes(favoriteId)) {
+      window.console.log('You already added this id.')
+      return
+    }
+    state.favorites.push(favoriteId)
   }
 }
 
@@ -46,7 +47,7 @@ export const actions = {
         return res.data
       })
       .catch((error) => {
-        window.console.log(error)
+        window.console.error(error)
         this.$router.push('/')
       })
 
@@ -55,7 +56,7 @@ export const actions = {
   async addFavorite({ rootState, commit }, favoriteVideoId) {
     const userUid = rootState.user.userUid
     if (!userUid) {
-      window.console.log('You have no Uid')
+      window.console.error('You have no Uid')
       return
     }
     await userRef
@@ -64,7 +65,32 @@ export const actions = {
       .doc()
       .set({ favoriteId: favoriteVideoId }, { merge: true })
       .then(function(res) {
-        commit('addFavorite', favoriteVideoId)
+        commit('setFavorites', favoriteVideoId)
+      })
+      .catch(function(error) {
+        window.console.error('Error adding document: ', error)
+      })
+  },
+  async fetchFavorites({ rootState, commit }) {
+    const userUid = rootState.user.userUid
+    if (!userUid) {
+      window.console.error('You have no Uid')
+      return
+    }
+    await userRef
+      .doc(userUid)
+      .collection(favoritesCollectionName)
+      .get()
+      .then(function(querySnapshot) {
+        if (!querySnapshot.docs) {
+          window.console.error("You couldn't get the docs-data from Firestore.")
+          return
+        }
+        querySnapshot.docs.forEach(function(doc) {
+          // TODO: データが多くなってくるときつくなりそう
+          const favoriteId = doc.data().favoriteId
+          commit('setFavorites', favoriteId)
+        })
       })
       .catch(function(error) {
         window.console.error('Error adding document: ', error)
