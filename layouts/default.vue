@@ -16,9 +16,6 @@ export default {
   components: {
     Header,
     Footer
-  },
-  created() {
-    // this.$vuetify.theme.light = true
   }
 }
 </script>

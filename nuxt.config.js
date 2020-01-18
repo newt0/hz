@@ -1,3 +1,5 @@
+import colors from 'vuetify/es5/util/colors'
+
 export default {
   mode: 'spa',
   env: {
@@ -39,7 +41,7 @@ export default {
   /*
    ** Plugins to load before mounting the App
    */
-  plugins: ['@/plugins/vuetify', '@/plugins/vue-youtube.js'],
+  plugins: ['@/plugins/vuetify.js', '@/plugins/vue-youtube.js'],
   /*
    ** Nuxt.js dev-modules
    */
@@ -56,12 +58,33 @@ export default {
    ** Build configuration
    */
   build: {
-    transpile: ['vuetify/lib'],
+    transpile: [], // ['vuetify/lib'],
     extend(config, ctx) {}
+  },
+  // Doc: https://blog.cloud-acct.com/posts/blog-vuetify2-versionup/
+  vuetify: {
+    customVariables: [],
+    theme: {
+      options: {
+        customProperties: true
+      },
+      dark: false,
+      themes: {
+        light: {
+          primary: colors.blue.darken2,
+          accent: colors.grey.darken3,
+          secondary: colors.amber.darken3,
+          info: colors.teal.lighten1,
+          warning: colors.amber.base,
+          error: colors.deepOrange.accent4,
+          success: colors.green.accent3,
+          background: colors.grey.lighten5
+        }
+      }
+    }
   },
   router: {
     base: '/',
     middleware: ['authenticated']
-  },
-  axios: {}
+  }
 }
