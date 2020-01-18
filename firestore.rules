@@ -1,26 +1,18 @@
-rules_version = '2';
+// TODO: 頃合いをみてバージョン2に対応させたい
+// rules_version = '2';
+// https://firebase.google.com/docs/firestore/security/rules-query#secure_collection_group_queries_based_on_a_field
 
 service cloud.firestore {
   match /databases/{database}/documents {
     match /users/{userDocumentId} {
       allow read: if isAuthenticated() && (isUserAuthenticated(userDocumentId));
       allow update: if isAuthenticated() && (isUserAuthenticated(userDocumentId));
-      allow create: if isAuthenticated() &&
-        incomingHasAll(["createdAt", "uid", "displayName"]) &&
-        incomingData().createdAt is timestamp &&
-        incomingData().updatedAt is timestamp &&
-        validateString(incomingData().displayName, 0, 300) &&
-        validateString(incomingData().uid, 0, 300);
-
+      allow create: if isAuthenticated()
       match /favorites/{favoriteId} {
         allow read: if isAuthenticated() && (isUserAuthenticated(userDocumentId));
         allow update: if isAuthenticated() && (isUserAuthenticated(userDocumentId));
-        allow create: if isAuthenticated() &&
-          isUserAuthenticated(userDocumentId) &&
-          incomingHasAll(["createdAt", "favoriteId"]) &&
-          incomingData().createdAt is timestamp &&
-          incomingData().updatedAt is timestamp;
-      }
+        allow create: if isAuthenticated()
+    	}
     }
   }
 }

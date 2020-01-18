@@ -39,7 +39,7 @@ export default {
   /*
    ** Plugins to load before mounting the App
    */
-  plugins: ['~/plugins/vue-youtube.js'],
+  plugins: ['@/plugins/vuetify', '@/plugins/vue-youtube.js'],
   /*
    ** Nuxt.js dev-modules
    */
@@ -56,9 +56,7 @@ export default {
    ** Build configuration
    */
   build: {
-    /*
-     ** You can extend webpack config here
-     */
+    transpile: ['vuetify/lib'],
     extend(config, ctx) {}
   },
   router: {

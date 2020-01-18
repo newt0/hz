@@ -18,7 +18,7 @@ export default {
     Footer
   },
   created() {
-    this.$vuetify.theme.light = true
+    // this.$vuetify.theme.light = true
   }
 }
 </script>
