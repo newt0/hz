@@ -1,0 +1,48 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /users/{userDocumentId} {
+      allow read: if isAuthenticated() && (isUserAuthenticated(userDocumentId));
+      allow update: if isAuthenticated() && (isUserAuthenticated(userDocumentId));
+      allow create: if isAuthenticated() &&
+        incomingHasAll(["createdAt", "uid", "displayName"]) &&
+        incomingData().createdAt is timestamp &&
+        incomingData().updatedAt is timestamp &&
+        validateString(incomingData().displayName, 0, 300) &&
+        validateString(incomingData().uid, 0, 300);
+
+      match /favorites/{favoriteId} {
+        allow read: if isAuthenticated() && (isUserAuthenticated(userDocumentId));
+        allow update: if isAuthenticated() && (isUserAuthenticated(userDocumentId));
+        allow create: if isAuthenticated() &&
+          isUserAuthenticated(userDocumentId) &&
+          incomingHasAll(["createdAt", "favoriteId"]) &&
+          incomingData().createdAt is timestamp &&
+          incomingData().updatedAt is timestamp;
+      }
+    }
+  }
+}
+
+function isAuthenticated() {
+  return request.auth != null;
+}
+
+function isUserAuthenticated(userID) {
+  return request.auth.uid == userID;
+}
+
+function incomingData() {
+  return request.resource.data;
+}
+
+function incomingHasAll(keys) {
+  return request.resource.data.keys().hasAll(keys);
+}
+
+function validateString(text, min, max) {
+  return text is string &&
+  text.size() <= max &&
+  text.size() >= min;
+}
