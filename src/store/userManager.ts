@@ -1,15 +1,15 @@
-import { Module, VuexModule, Mutation /*, Action */ } from 'vuex-module-decorators'
+import { Module, VuexModule, Mutation, Action } from 'vuex-module-decorators'
 import firebase from '~/plugins/firebase'
-// import firestoreModelName from '~/constants/firestoreModelName'
-import { User } from '~/types/User'
+import firestoreModelName from '~/constants/firestoreModelName'
 
 const firestore = firebase.firestore()
 
 @Module({ stateFactory: true, namespaced: true, name: 'userManager' })
 export default class UserManager extends VuexModule {
-  private user?: User
   private userUid?: string
   private userDisplayName?: string
+  private userPhotoUrl?: string
+  private userEmail?: string
 
   get getUserUid(): string {
     return this.userUid ?? ''
@@ -17,6 +17,14 @@ export default class UserManager extends VuexModule {
 
   get getUserDisplayName(): string {
     return this.userDisplayName ?? ''
+  }
+
+  get getUserPhotoUrl(): string {
+    return this.userPhotoUrl ?? ''
+  }
+
+  get getUserEmail(): string {
+    return this.userEmail ?? ''
   }
 
   @Mutation
@@ -30,49 +38,34 @@ export default class UserManager extends VuexModule {
   }
 
   @Mutation
-  private setUser(docData?: firebase.firestore.DocumentData) {
-    const userData = docData as firebase.firestore.DocumentData
-    if (!userData) {
-      return
+  private setUserPhotoUrl(userPhotoUrl?: string) {
+    this.userPhotoUrl = userPhotoUrl
+  }
+
+  @Mutation
+  private setUserEmail(userEmail?: string) {
+    this.userEmail = userEmail
+  }
+
+  @Action({ rawError: true })
+  async createUser(user: firebase.User) {
+    const userUid = user.uid
+    const userFields = {
+      userDisplayName: user.displayName || '',
+      userPhotoUrl: user.photoURL || '',
+      userEmail: user.email || '',
+      createdAt: firebase.firestore.Timestamp.now(),
+      updatedAt: firebase.firestore.Timestamp.now(),
     }
-    const user = new User({
-      userDisplayName: userData.userDisplayName,
-      createdAt: userData.createdAt,
-      updatedAt: userData.updatedAt,
-    })
-    this.user = user
+    await firestore
+      .collection(firestoreModelName.version)
+      .doc(process.env.FB_ROOT_VERSION)
+      .collection(firestoreModelName.users)
+      .doc(userUid)
+      .set(userFields, { merge: true })
+    this.setUserUid(userUid)
+    this.setUserDisplayName(userFields.userDisplayName)
+    this.setUserPhotoUrl(userFields.userPhotoUrl)
+    this.setUserEmail(userFields.userEmail)
   }
 }
-
-// export const actions = {
-//   async setUser({ commit }, user) {
-//     await userRef
-//       .doc(user.uid)
-//       .set({ uid: user.uid, displayName: user.displayName }, { merge: true })
-//       .then(function(res) {
-//         commit('setUserUid', user.uid)
-//         commit('setUserDisplayName', user.displayName)
-//       })
-//       .catch(function(error) {
-//         window.console.error('Error User-Data adding document: ', error)
-//       })
-//   }
-// }
-
-// export const mutations = {
-//   setUserDisplayName(state, userDisplayName) {
-//     state.userDisplayName = userDisplayName
-//   },
-//   setUserUid(state, userUid) {
-//     state.userUid = userUid
-//   }
-// }
-
-// export const getters = {
-//   userUid: (state) => {
-//     return state.userUid
-//   },
-//   displayName: (state) => {
-//     return state.userDisplayName
-//   }
-// }

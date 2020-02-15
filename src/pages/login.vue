@@ -23,35 +23,45 @@
 import { Component, Vue } from 'nuxt-property-decorator'
 import * as firebaseui from 'firebaseui'
 import firebase, { authProviders } from '~/plugins/firebase'
-// import { userStore } from '@/store'
+import { appAuthStore, userStore } from '@/store'
 
-@Component({})
+@Component
 export default class Login extends Vue {
   mounted() {
     const auth = firebase.auth()
-    auth.onAuthStateChanged(user => {
-      if (!user) {
-        const ui = firebaseui.auth.AuthUI.getInstance() || new firebaseui.auth.AuthUI(auth)
-        const config = {
-          signInOptions: [authProviders.Google],
-          callbacks: {
-            // Nuxtのローカルサーバーで起こるCORSエラーのためこのように設定
-            // 本番環境では不要
-            signInSuccessWithAuthResult: (authResult: firebase.auth.UserCredential) => {
-              window.console.log(authResult) // operationType: "signIn"
-              // userStore
-              return false // false を設定すると signInSuccessUrl にはリダイレクトしない
-            },
-          },
-          signInSuccessUrl: '/',
-          // ログインフロー設定:
-          // Nuxt のローカルサーバーで起こる CORS エラーがあるので popup 推奨
-          signInFlow: 'popup',
-        }
+    // TODO: 引数 user がログアウトしていても null にならない
+    auth.onAuthStateChanged(_ => {
+      const ui = firebaseui.auth.AuthUI.getInstance() || new firebaseui.auth.AuthUI(auth)
+      const config = {
+        signInOptions: [authProviders.Google],
+        callbacks: {
+          // Nuxtのローカルサーバーで起こる
+          // CORSエラーのためこのように設定
+          // 本番環境では不要
+          signInSuccessWithAuthResult: (authResult: firebase.auth.UserCredential) => {
+            if (!authResult.operationType || !authResult.user) {
+              return false
+            }
+            appAuthStore.createLoginStatus(authResult.operationType)
+            userStore.createUser(authResult.user)
 
-        ui.start('#firebaseui-auth-container', config)
+            this.moveToIndexPage()
+
+            // false を設定すると signInSuccessUrl にはリダイレクトしない
+            return false
+          },
+        },
+        // ログインフロー設定:
+        // Nuxt のローカルサーバーで起こる
+        // CORS エラーがあるので popup 推奨
+        signInFlow: 'popup',
       }
+      ui.start('#firebaseui-auth-container', config)
     })
+  }
+
+  private moveToIndexPage() {
+    this.$router.push('/')
   }
 }
 </script>

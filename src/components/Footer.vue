@@ -22,15 +22,10 @@
 
 <script lang="ts">
 import { Component, Vue } from 'nuxt-property-decorator'
-// import { appAuthStore } from '@/store'
 
 @Component
 export default class Footer extends Vue {
   icons: Array<string> = ['mdi mdi-facebook', 'mdi mdi-twitter', 'mdi mdi-google-plus', 'mdi mdi-linkedin', 'mdi mdi-instagram']
-
-  isLoggedIn() {
-    console.log('isLoggedIn')
-  }
 
   currentYear() {
     return new Date().getFullYear()

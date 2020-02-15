@@ -3,7 +3,7 @@
     <v-navigation-drawer v-model="drawer" app>
       <v-list-item>
         <v-list-item-content>
-          <v-list-item-title class="title"> ようこそ {{ userDisplayName }} さん </v-list-item-title>
+          <v-list-item-title class="title"> ようこそ {{ userDisplayName() }} さん </v-list-item-title>
           <v-list-item-subtitle></v-list-item-subtitle>
         </v-list-item-content>
       </v-list-item>
@@ -19,7 +19,7 @@
             <v-list-item-title>Home</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item v-if="isLoggedIn" link to="my-page">
+        <v-list-item v-if="isLoggedIn()" link to="my-page">
           <v-list-item-action>
             <v-icon>mdi-account</v-icon>
           </v-list-item-action>
@@ -27,7 +27,7 @@
             <v-list-item-title>My Page</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item v-if="isLoggedIn" link @click="logout">
+        <v-list-item v-if="isLoggedIn()" link @click="logout">
           <v-list-item-action>
             <v-icon>mdi-logout-variant</v-icon>
           </v-list-item-action>
@@ -61,16 +61,22 @@ export default class Header extends Vue {
   drawer: Object | null = null
   userName: string = 'ゲスト'
 
-  userDisplayName() {
+  private userDisplayName() {
     return appAuthStore.isAuthenticated ? userStore.getUserDisplayName : this.userName
   }
 
-  isLoggedIn() {
-    console.log('isLoggedIn')
+  private isLoggedIn() {
+    console.log(appAuthStore.isAuthenticated)
+    return appAuthStore.isAuthenticated
   }
 
-  logout() {
-    console.log('logout')
+  private async logout() {
+    await appAuthStore.logout()
+    this.moveToIndexPage()
+  }
+
+  private moveToIndexPage() {
+    this.$router.push('/')
   }
 }
 </script>

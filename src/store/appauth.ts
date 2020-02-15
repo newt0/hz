@@ -6,25 +6,31 @@ const auth: firebase.auth.Auth = firebase.auth()
 
 @Module({ stateFactory: true, namespaced: true, name: 'appauth' })
 export default class AppAuth extends VuexModule {
-  private email?: string | null
+  // TODO: ステータスをenumで管理したい
+  private loginStatus?: string | null
 
   get isAuthenticated(): boolean {
-    return this.email !== null
+    return this.loginStatus !== null
   }
 
   @Mutation
-  private setUser(user: firebase.User) {
-    this.email = user.email
+  private setUser(operationType: string) {
+    this.loginStatus = operationType
   }
 
   @Mutation
-  private removeUser() {
-    this.email = null
+  private removeLoginStatus() {
+    this.loginStatus = null
+  }
+
+  @Action({ rawError: true })
+  createLoginStatus(operationType: string) {
+    this.setUser(operationType)
   }
 
   @Action({ rawError: true })
   async logout() {
     await auth.signOut()
-    this.removeUser()
+    this.removeLoginStatus()
   }
 }
