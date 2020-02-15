@@ -1,0 +1,7 @@
+/dist/
+/node_modules/
+/public/
+/*.js
+/*.ts
+/package.json
+/package-lock.json
