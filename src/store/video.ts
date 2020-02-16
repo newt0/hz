@@ -43,6 +43,8 @@ export default class Video extends VuexModule {
     if (!process.env.YT_SEARCH_API_BASE_URL) {
       return
     }
+    // TODO: then()を使用しない書き方になおしたい
+    //   例: Youtubeから返却値用のモデルを作って待ち構える感じとか
     const videoItems = await $axios
       .get(process.env.YT_SEARCH_API_BASE_URL, {
         params: requestParams,
