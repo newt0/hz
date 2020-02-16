@@ -1,54 +1,64 @@
-// import axios from 'axios'
+import { Module, VuexModule, Mutation, Action } from 'vuex-module-decorators'
+import { $axios } from '~/plugins/axios-accessor'
 
-// export const state = () => ({
-//   items: [],
-//   isLoading: false,
-// })
+// import firebase from '~/plugins/firebase'
+// import firestoreModelName from '~/constants/firestoreModelName'
 
-// export const mutations = {
-//   setVideos(state, items) {
-//     state.items = items
-//   },
-//   hideLoading(state) {
-//     state.isLoading = false
-//   },
-//   showLoading(state) {
-//     state.isLoading = true
-//   },
-// }
+// const firestore = firebase.firestore()
 
-// export const actions = {
-//   async getVideos({ commit }, payload) {
-//     const videoPart = 'snippet'
-//     const maxResultsNumber = 9
-//     const requestParams = {
-//       key: process.env.YT_API_KEY,
-//       part: videoPart,
-//       q: payload.keyword,
-//       maxResults: maxResultsNumber,
-//     }
-//     const requestHeaders = {
-//       'Content-Type': 'application/json',
-//     }
+@Module({ stateFactory: true, namespaced: true, name: 'video' })
+export default class Video extends VuexModule {
+  selectedHz?: string
 
-//     // リクエスト送信
-//     const methodName = 'get'
-//     const timeoutTime = 15000
-//     const videos = await axios
-//       .get(process.env.YT_SEARCH_API_BASE_URL, {
-//         params: requestParams,
-//         method: methodName,
-//         headers: requestHeaders,
-//         timeout: timeoutTime,
-//       })
-//       .then(function(res) {
-//         return res.data
-//       })
-//       .catch(error => {
-//         window.console.log(error)
-//         this.$router.push('/')
-//       })
+  get getSelectedHz(): string {
+    return this.selectedHz ?? ''
+  }
 
-//     commit('setVideos', videos)
-//   },
-// }
+  @Mutation
+  private setSelectedHz(selectedHz: string) {
+    this.selectedHz = selectedHz
+  }
+
+  @Action({ rawError: true })
+  updateSelectedHz(selectedHz: string) {
+    this.setSelectedHz(selectedHz)
+  }
+
+  @Action({ rawError: true })
+  async fetchVideoItems(keyword: string) {
+    const videoPart = 'snippet'
+    const maxResultsNumber = 9
+    const requestParams = {
+      key: process.env.YT_API_KEY,
+      part: videoPart,
+      q: keyword,
+      maxResults: maxResultsNumber,
+    }
+    const requestHeaders = {
+      'Content-Type': 'application/json',
+    }
+
+    const methodName = 'get'
+    const timeoutTime = 15000
+    if (!process.env.YT_SEARCH_API_BASE_URL) {
+      return
+    }
+    const videoItems = await $axios
+      .get(process.env.YT_SEARCH_API_BASE_URL, {
+        params: requestParams,
+        method: methodName,
+        headers: requestHeaders,
+        timeout: timeoutTime,
+      })
+      .then(result => {
+        return result.data.items
+      })
+      .catch((error: any) => {
+        window.console.log(error)
+      })
+    if (!videoItems) {
+      return
+    }
+    return videoItems
+  }
+}

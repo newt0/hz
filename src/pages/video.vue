@@ -2,12 +2,14 @@
   <VideoItems />
 </template>
 
-<script>
+<script lang="ts">
+import { Component, Vue } from 'nuxt-property-decorator'
 import VideoItems from '@/components/VideoItems.vue'
 
-export default {
+@Component({
   components: {
     VideoItems,
   },
-}
+})
+export default class Video extends Vue {}
 </script>

@@ -2,13 +2,16 @@ import { Store } from 'vuex'
 import { getModule } from 'vuex-module-decorators'
 import AppAuth from '@/store/appauth'
 import User from '~/store/userManager'
+import Video from '~/store/video'
 
 let appAuthStore: AppAuth; // eslint-disable-line
 let userStore: User; // eslint-disable-line
+let videoStore: Video; // eslint-disable-line
 
 function initialiseStores(store: Store<any>): void {
   appAuthStore = getModule(AppAuth, store)
   userStore = getModule(User, store)
+  videoStore = getModule(Video, store)
 }
 
-export { initialiseStores, appAuthStore, userStore }
+export { initialiseStores, appAuthStore, userStore, videoStore }

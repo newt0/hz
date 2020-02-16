@@ -18,7 +18,7 @@ export default ({ store, isHMR }: Context) => {
   window.onNuxtReady(() => {
     const options = {
       key: 'vuex',
-      paths: ['appauth', 'userManager'], // localStorageに保存したいstoreを入れる
+      paths: ['appauth', 'userManager', 'video'], // localStorageに保存したいstoreを入れる
     }
     createPersistedState(options)(store) // vuex plugins can be connected to store, even after creation
   })

@@ -3,8 +3,8 @@
     <template v-for="video in videoList">
       <v-list-item :key="video.hz" @click="clickLink(video.hz)">
         <v-list-item-content>
-          <v-list-item-title v-html="video.hz + ` Hz`"></v-list-item-title>
-          <v-list-item-subtitle v-html="video.description"> </v-list-item-subtitle>
+          <v-list-item-title>{{ video.hz + 'Hz' }}</v-list-item-title>
+          <v-list-item-subtitle>{{ video.description }}</v-list-item-subtitle>
         </v-list-item-content>
       </v-list-item>
     </template>
@@ -13,8 +13,9 @@
 
 <script lang="ts">
 import { Component, Vue } from 'nuxt-property-decorator'
+import { videoStore } from '@/store'
 
-@Component({})
+@Component
 export default class Index extends Vue {
   videoList = [
     { hz: '174', description: '意識の拡大と進化の基礎' },
@@ -29,9 +30,8 @@ export default class Index extends Vue {
   ]
 
   private clickLink(hzNumber: string) {
-    console.log(hzNumber)
-    // this.$store.dispatch('setSelectedHz', hzNumber)
-    // this.$router.push({ name: 'video' })
+    videoStore.updateSelectedHz(hzNumber)
+    this.$router.push({ name: 'video' })
   }
 }
 </script>

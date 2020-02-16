@@ -66,7 +66,6 @@ export default class Header extends Vue {
   }
 
   private isLoggedIn() {
-    console.log(appAuthStore.isAuthenticated)
     return appAuthStore.isAuthenticated
   }
 
