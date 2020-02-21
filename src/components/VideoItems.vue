@@ -18,25 +18,26 @@
 
 <script lang="ts">
 import { Component, Vue } from 'nuxt-property-decorator'
-import { videoStore } from '@/store'
+import { videoStore, favoriteStore } from '@/store'
+import videos from '~/constants/videos'
 
 @Component
 export default class VideoItems extends Vue {
-  private videoWidth = '288'
-  private videoHeight = '162'
+  private videoWidth = videos.videoWidth
+  private videoHeight = videos.videoHeight
   private searchKeyword = videoStore.getSelectedHz + 'Hz music' || 'Solfeggio Harmonics Music'
   private videoItems: Array<Object> = []
 
-  created() {
-    this.getVideos()
+  async mounted() {
+    await this.fetchVideoItems()
   }
 
-  private async getVideos() {
+  private async fetchVideoItems() {
     this.videoItems = await videoStore.fetchVideoItems(this.searchKeyword)
   }
 
-  private clickFavoriteIcon() {
-    console.log('clickFavoriteIcon')
+  private async clickFavoriteIcon(favoriteVideoId: string) {
+    await favoriteStore.addFavorite(favoriteVideoId)
   }
 }
 </script>

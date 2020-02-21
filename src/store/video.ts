@@ -1,9 +1,9 @@
 import { Module, VuexModule, Mutation, Action } from 'vuex-module-decorators'
 import { $axios } from '~/plugins/axios-accessor'
+import processingConstants from '~/constants/processingConstants'
 
 // import firebase from '~/plugins/firebase'
 // import firestoreModelName from '~/constants/firestoreModelName'
-
 // const firestore = firebase.firestore()
 
 @Module({ stateFactory: true, namespaced: true, name: 'video' })
@@ -26,21 +26,16 @@ export default class Video extends VuexModule {
 
   @Action({ rawError: true })
   async fetchVideoItems(keyword: string) {
-    const videoPart = 'snippet'
-    const maxResultsNumber = 9
+    if (!process.env.YT_SEARCH_API_BASE_URL || !process.env.YT_API_KEY) {
+      return
+    }
     const requestParams = {
       key: process.env.YT_API_KEY,
-      part: videoPart,
+      part: processingConstants.ajax.youtube.videoPart,
       q: keyword,
-      maxResults: maxResultsNumber,
+      maxResults: processingConstants.ajax.youtube.maxResultsNumber,
     }
-    const requestHeaders = {
-      'Content-Type': 'application/json',
-    }
-
-    const methodName = 'get'
-    const timeoutTime = 15000
-    if (!process.env.YT_SEARCH_API_BASE_URL) {
+    if (!requestParams) {
       return
     }
     // TODO: then()を使用しない書き方になおしたい
@@ -48,15 +43,15 @@ export default class Video extends VuexModule {
     const videoItems = await $axios
       .get(process.env.YT_SEARCH_API_BASE_URL, {
         params: requestParams,
-        method: methodName,
-        headers: requestHeaders,
-        timeout: timeoutTime,
+        method: processingConstants.ajax.youtube.methodName,
+        headers: processingConstants.ajax.requestHeaders,
+        timeout: processingConstants.ajax.youtube.timeoutTime,
       })
       .then(result => {
         return result.data.items
       })
       .catch((error: any) => {
-        window.console.log(error)
+        throw new Error(error)
       })
     if (!videoItems) {
       return
