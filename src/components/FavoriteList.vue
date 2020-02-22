@@ -44,6 +44,7 @@ export default class FavoriteList extends Vue {
     await favoriteStore.removeFavorite(favoriteVideoId).catch((error: any) => {
       alert(error)
     })
+    alert('削除しました')
   }
 }
 </script>

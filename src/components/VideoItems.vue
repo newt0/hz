@@ -6,7 +6,7 @@
           <youtube ref="youtube" :video-id="item.id.videoId" :width="videoWidth" :height="videoHeight" />
           <p>{{ item.snippet.title }}</p>
           <p>
-            <v-icon @click="clickFavoriteIcon(item.id.videoId)">
+            <v-icon @click="clickFavoriteIcon(item.id.videoId, item.snippet.title)">
               mdi mdi-heart
             </v-icon>
           </p>
@@ -36,12 +36,12 @@ export default class VideoItems extends Vue {
     this.videoItems = await videoStore.fetchVideoItems(this.searchKeyword)
   }
 
-  private async clickFavoriteIcon(favoriteVideoId: string) {
+  private async clickFavoriteIcon(favoriteVideoId: string, favoriteVideoTitle: string) {
     if (!appAuthStore.isAuthenticated) {
       alert('ログインをしてください')
       return
     }
-    await favoriteStore.addFavorite(favoriteVideoId).catch((error: any) => {
+    await favoriteStore.addFavorite({ favoriteVideoId: favoriteVideoId, favoriteVideoTitle: favoriteVideoTitle }).catch((error: any) => {
       alert(error)
     })
   }

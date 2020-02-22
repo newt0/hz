@@ -1,6 +1,6 @@
 import { Module, VuexModule, Action, Mutation } from 'vuex-module-decorators'
 import firebase from '~/plugins/firebase'
-// import { userStore } from '@/store'
+import { userStore } from '@/store'
 import { Favorite } from '@/types/Favorite'
 import firestoreModelName from '~/constants/firestoreModelName'
 
@@ -24,6 +24,7 @@ export default class FavoriteManager extends VuexModule {
     const favoriteArray: Favorite[] = docSnapshot.map(doc => {
       return new Favorite({
         favoriteVideoId: doc.id,
+        favoriteVideoTitle: doc.data().favoriteVideoTitle,
         createdAt: firebase.firestore.Timestamp.now(),
         updatedAt: firebase.firestore.Timestamp.now(),
       })
@@ -37,9 +38,12 @@ export default class FavoriteManager extends VuexModule {
   }
 
   @Action({ rawError: true })
-  async addFavorite(favoriteVideoId: string) {
-    const userUid = 'puUGy60sopUN5mnv8qm3x2wnIYl1'
-    // const userUid = userStore.getUserUid
+  async addFavorite(favoriteVideoData: { favoriteVideoId: string; favoriteVideoTitle: string }) {
+    const userUid = userStore.getUserUid
+    const favoriteVideoSetData = {
+      favoriteVideoId: favoriteVideoData.favoriteVideoId,
+      favoriteVideoTitle: favoriteVideoData.favoriteVideoTitle,
+    }
     await firestore
       .collection(firestoreModelName.version)
       .doc(process.env.FB_ROOT_VERSION)
@@ -47,12 +51,12 @@ export default class FavoriteManager extends VuexModule {
       .doc(userUid)
       .collection(firestoreModelName.favorites)
       .doc()
-      .set({ favoriteVideoId: favoriteVideoId }, { merge: true })
+      .set(favoriteVideoSetData, { merge: true })
   }
 
   @Action({ rawError: true })
   async removeFavorite(favoriteVideoId: string) {
-    const userUid = 'puUGy60sopUN5mnv8qm3x2wnIYl1' // userStore.getUserUid
+    const userUid = userStore.getUserUid
     await this.getFavoriteDocument(favoriteVideoId)
     await firestore
       .collection(firestoreModelName.version)
@@ -66,7 +70,7 @@ export default class FavoriteManager extends VuexModule {
 
   @Action({ rawError: true })
   async fetchFavorites() {
-    const userUid = 'puUGy60sopUN5mnv8qm3x2wnIYl1' // userStore.getUserUid
+    const userUid = userStore.getUserUid
     const favorites = await firestore
       .collection(firestoreModelName.version)
       .doc(process.env.FB_ROOT_VERSION)
@@ -79,7 +83,7 @@ export default class FavoriteManager extends VuexModule {
 
   @Action({ rawError: true })
   private async getFavoriteDocument(favoriteVideoId: string) {
-    const userUid = 'puUGy60sopUN5mnv8qm3x2wnIYl1' // userStore.getUserUid
+    const userUid = userStore.getUserUid
     const querySnapshot = await firestore
       .collection(firestoreModelName.version)
       .doc(process.env.FB_ROOT_VERSION)
