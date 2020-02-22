@@ -2,10 +2,6 @@ import { Module, VuexModule, Mutation, Action } from 'vuex-module-decorators'
 import { $axios } from '~/plugins/axios-accessor'
 import processingConstants from '~/constants/processingConstants'
 
-// import firebase from '~/plugins/firebase'
-// import firestoreModelName from '~/constants/firestoreModelName'
-// const firestore = firebase.firestore()
-
 @Module({ stateFactory: true, namespaced: true, name: 'video' })
 export default class Video extends VuexModule {
   selectedHz?: string

@@ -8,8 +8,8 @@ export interface IUser {
 
 export class User implements IUser {
   userDisplayName: string = ''
-  createdAt: firebase.firestore.Timestamp = new firebase.firestore.Timestamp(0, 0)
-  updatedAt: firebase.firestore.Timestamp = new firebase.firestore.Timestamp(0, 0)
+  createdAt: firebase.firestore.Timestamp
+  updatedAt: firebase.firestore.Timestamp
 
   constructor(userData: { userDisplayName: string; createdAt: firebase.firestore.Timestamp; updatedAt: firebase.firestore.Timestamp }) {
     this.userDisplayName = userData.userDisplayName

@@ -3,7 +3,7 @@ import { getModule } from 'vuex-module-decorators'
 import AppAuth from '@/store/appauth'
 import User from '@/store/userManager'
 import Video from '@/store/video'
-import Favorite from '@/store/favorite'
+import Favorite from '~/store/favoriteManager'
 
 let appAuthStore: AppAuth; // eslint-disable-line
 let userStore: User; // eslint-disable-line

@@ -5,7 +5,7 @@ const processingConstants: { [key: string]: any } = {
     },
     youtube: {
       videoPart: 'snippet',
-      maxResultsNumber: 9,
+      maxResultsNumber: 1,
       methodName: 'get',
       timeoutTime: 15000,
     },

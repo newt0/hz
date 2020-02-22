@@ -2,21 +2,14 @@
   <FavoriteList />
 </template>
 
-<script>
-import { mapGetters } from 'vuex'
+<script lang="ts">
+import { Component, Vue } from 'nuxt-property-decorator'
 import FavoriteList from '@/components/FavoriteList.vue'
 
-export default {
+@Component({
   components: {
     FavoriteList,
   },
-  computed: {
-    ...mapGetters(['auth/isAuthenticated', 'auth/isLoggedIn']),
-  },
-  mounted() {
-    // if (!this.isAuthenticated) {
-    //   this.$router.push('/')
-    // }
-  },
-}
+})
+export default class MyPage extends Vue {}
 </script>

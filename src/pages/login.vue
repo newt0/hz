@@ -52,8 +52,7 @@ export default class Login extends Vue {
           },
         },
         // ログインフロー設定:
-        // Nuxt のローカルサーバーで起こる
-        // CORS エラーがあるので popup 推奨
+        // Nuxt のローカルサーバーで起こる CORS エラーがあるので popup 推奨
         signInFlow: 'popup',
       }
       ui.start('#firebaseui-auth-container', config)

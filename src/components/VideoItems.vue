@@ -18,7 +18,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'nuxt-property-decorator'
-import { videoStore, favoriteStore } from '@/store'
+import { appAuthStore, videoStore, favoriteStore } from '@/store'
 import videos from '~/constants/videos'
 
 @Component
@@ -37,7 +37,13 @@ export default class VideoItems extends Vue {
   }
 
   private async clickFavoriteIcon(favoriteVideoId: string) {
-    await favoriteStore.addFavorite(favoriteVideoId)
+    if (!appAuthStore.isAuthenticated) {
+      alert('ログインをしてください')
+      return
+    }
+    await favoriteStore.addFavorite(favoriteVideoId).catch((error: any) => {
+      alert(error)
+    })
   }
 }
 </script>

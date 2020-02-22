@@ -19,7 +19,7 @@
             <v-list-item-title>Home</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item v-if="isLoggedIn()" link to="my-page">
+        <v-list-item v-if="isLoggedIn()" link to="mypage">
           <v-list-item-action>
             <v-icon>mdi-account</v-icon>
           </v-list-item-action>
