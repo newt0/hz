@@ -1,5 +1,5 @@
 import { Module, VuexModule, Mutation, Action } from 'vuex-module-decorators'
-import { $axios } from '~/plugins/axios-accessor'
+import { $axios } from '~/plugins/axiosAccessor'
 import processingConstants from '~/constants/processingConstants'
 
 @Module({ stateFactory: true, namespaced: true, name: 'video' })

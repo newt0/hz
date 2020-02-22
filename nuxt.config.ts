@@ -27,7 +27,7 @@ const nuxtConfig: Configuration = {
   ],
   plugins: [
     { src: '~plugins/persistedstate.ts', ssr: false },
-    '@/plugins/axios-accessor',
+    '@/plugins/axiosAccessor',
     '@/plugins/firebase',
     '@/plugins/vuetify',
     '@/plugins/vueYoutube.js'
