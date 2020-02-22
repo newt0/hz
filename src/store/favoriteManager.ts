@@ -96,6 +96,9 @@ export default class FavoriteManager extends VuexModule {
         return favoriteDoc
       }
     })
+    if (favoriteDoc.length === 0) {
+      throw new Error('お気に入り動画の情報の取得に失敗しました')
+    }
     this.setFavoriteDocumentId(favoriteDoc[0].id)
   }
 }

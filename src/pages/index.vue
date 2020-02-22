@@ -15,7 +15,7 @@
 import { Component, Vue } from 'nuxt-property-decorator'
 import { videoStore } from '@/store'
 
-@Component
+@Component({})
 export default class Index extends Vue {
   videoList = [
     { hz: '174', description: '意識の拡大と進化の基礎' },
