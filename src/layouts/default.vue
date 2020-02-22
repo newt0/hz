@@ -8,16 +8,18 @@
   </v-app>
 </template>
 
-<script>
+<script lang="ts">
+import { Component, Vue } from 'nuxt-property-decorator'
 import Header from '@/components/Header.vue'
 import Footer from '@/components/Footer.vue'
 
-export default {
+@Component({
   components: {
     Header,
     Footer,
   },
-}
+})
+export default class VideoItems extends Vue {}
 </script>
 
 <style>

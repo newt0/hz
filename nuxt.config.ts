@@ -29,8 +29,8 @@ const nuxtConfig: Configuration = {
     { src: '~plugins/persistedstate.ts', ssr: false },
     '@/plugins/axios-accessor',
     '@/plugins/firebase',
-    '@/plugins/vuetify.js',
-    '@/plugins/vue-youtube.js'
+    '@/plugins/vuetify',
+    '@/plugins/vueYoutube.js'
   ],
   buildModules: [
     // Doc: https://github.com/nuxt-community/eslint-module
@@ -48,7 +48,6 @@ const nuxtConfig: Configuration = {
   },
   build: {
     extend(config: any, ctx: any) {
-      // Run ESLint on save
       if (ctx.isDev && ctx.isClient) {
         config.module.rules.push({
           enforce: 'pre',
