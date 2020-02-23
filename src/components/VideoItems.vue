@@ -29,8 +29,10 @@ export default class VideoItems extends mixins(Processing) {
   private searchKeyword = videoStore.getSelectedHz + 'Hz music' || 'Solfeggio Harmonics Music'
   private videoItems: Array<Object> = []
 
-  async mounted() {
-    await this.fetchVideoItems()
+  mounted() {
+    // TODO: setTimeout()を使わない方法を検討する
+    // PR: https://github.com/maecha/hz/issues/14
+    setTimeout(() => this.fetchVideoItems(), 0)
   }
 
   private async fetchVideoItems() {
