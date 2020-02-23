@@ -50,7 +50,7 @@ export default class Video extends VuexModule {
         throw new Error(error)
       })
     if (!videoItems) {
-      return
+      throw new Error('動画データの取得に失敗しました')
     }
     return videoItems
   }
