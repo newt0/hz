@@ -45,7 +45,7 @@
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
-    <v-app-bar app color="light-green" dark>
+    <v-app-bar app dark color="primary lighten-1 white--text">
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
       <v-toolbar-title>hz - Solfeggio Harmonics Music</v-toolbar-title>
     </v-app-bar>

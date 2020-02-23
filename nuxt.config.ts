@@ -19,9 +19,7 @@ const nuxtConfig: Configuration = {
     ],
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
   },
-  loading: { 
-    color: '#fff'
-  },
+  loading: '~/components/Loading.vue',
   css: [
     'firebaseui/dist/firebaseui.css'
   ],

@@ -57,6 +57,9 @@ export default class FavoriteManager extends VuexModule {
   @Action({ rawError: true })
   async removeFavorite(favoriteVideoId: string) {
     const userUid = userStore.getUserUid
+    if (!userUid) {
+      throw new Error('ユーザー情報の読み込みに失敗しました')
+    }
     await this.getFavoriteDocument(favoriteVideoId)
     await firestore
       .collection(firestoreModelName.version)
@@ -71,6 +74,9 @@ export default class FavoriteManager extends VuexModule {
   @Action({ rawError: true })
   async fetchFavorites() {
     const userUid = userStore.getUserUid
+    if (!userUid) {
+      throw new Error('ユーザー情報の読み込みに失敗しました')
+    }
     const favorites = await firestore
       .collection(firestoreModelName.version)
       .doc(process.env.FB_ROOT_VERSION)
@@ -84,6 +90,9 @@ export default class FavoriteManager extends VuexModule {
   @Action({ rawError: true })
   private async getFavoriteDocument(favoriteVideoId: string) {
     const userUid = userStore.getUserUid
+    if (!userUid) {
+      throw new Error('ユーザー情報の読み込みに失敗しました')
+    }
     const querySnapshot = await firestore
       .collection(firestoreModelName.version)
       .doc(process.env.FB_ROOT_VERSION)
