@@ -41,8 +41,10 @@ export default class FavoriteList extends mixins(Processing) {
     confirmDialog: ConfirmDialog
   }
 
-  async mounted() {
-    await this.fetchFavoriteList()
+  mounted() {
+    // TODO: setTimeout()を使わない方法を検討する
+    // PR: https://github.com/maecha/hz/issues/14
+    setTimeout(() => this.fetchFavoriteList(), 0)
   }
 
   private async fetchFavoriteList() {
