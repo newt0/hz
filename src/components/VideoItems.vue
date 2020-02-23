@@ -6,7 +6,7 @@
           <youtube ref="youtube" :video-id="item.id.videoId" :width="videoWidth" :height="videoHeight" />
           <p>{{ item.snippet.title }}</p>
           <p>
-            <v-icon @click="clickFavoriteIcon(item.id.videoId, item.snippet.title)">
+            <v-icon :disabled="isProcessing()" @click="clickFavoriteIcon(item.id.videoId, item.snippet.title)">
               mdi mdi-heart
             </v-icon>
           </p>
@@ -17,14 +17,15 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'nuxt-property-decorator'
+import { Component, mixins } from 'nuxt-property-decorator'
 import { appAuthStore, videoStore, favoriteStore } from '@/store'
-import videos from '~/constants/videos'
+import Processing from '@/mixins/processing'
+import videoConstants from '~/constants/videos'
 
-@Component
-export default class VideoItems extends Vue {
-  private videoWidth = videos.videoWidth
-  private videoHeight = videos.videoHeight
+@Component({})
+export default class VideoItems extends mixins(Processing) {
+  private videoWidth = videoConstants.videoWidth
+  private videoHeight = videoConstants.videoHeight
   private searchKeyword = videoStore.getSelectedHz + 'Hz music' || 'Solfeggio Harmonics Music'
   private videoItems: Array<Object> = []
 
@@ -33,17 +34,22 @@ export default class VideoItems extends Vue {
   }
 
   private async fetchVideoItems() {
+    this.startProcessing()
     this.videoItems = await videoStore.fetchVideoItems(this.searchKeyword)
+    this.endProcessing()
   }
 
   private async clickFavoriteIcon(favoriteVideoId: string, favoriteVideoTitle: string) {
+    this.startProcessing()
     if (!appAuthStore.isAuthenticated) {
       alert('ログインをしてください')
+      this.endProcessing()
       return
     }
     await favoriteStore.addFavorite({ favoriteVideoId: favoriteVideoId, favoriteVideoTitle: favoriteVideoTitle }).catch((error: any) => {
       alert(error)
     })
+    this.endProcessing()
   }
 }
 </script>

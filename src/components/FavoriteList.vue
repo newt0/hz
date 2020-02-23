@@ -5,7 +5,7 @@
         <v-col v-for="(favorite, key, index) in favoriteList" :key="index" cols="12" md="4">
           <youtube ref="youtube" :video-id="favorite.favoriteVideoId" :width="videoWidth" :height="videoHeight" />
           <p>
-            <v-icon @click="openConfirmDialog(favorite.favoriteVideoId)">
+            <v-icon :disabled="isProcessing()" @click="openConfirmDialog(favorite.favoriteVideoId)">
               mdi mdi-heart
             </v-icon>
           </p>
@@ -17,10 +17,11 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'nuxt-property-decorator'
+import { Component, mixins } from 'nuxt-property-decorator'
 import { favoriteStore } from '@/store'
 import { Favorite } from '@/types/Favorite'
-import videos from '~/constants/videos'
+import videoConstants from '~/constants/videos'
+import Processing from '@/mixins/processing'
 import ConfirmDialog from '@/components/ConfirmDialog.vue'
 
 @Component({
@@ -28,9 +29,9 @@ import ConfirmDialog from '@/components/ConfirmDialog.vue'
     ConfirmDialog,
   },
 })
-export default class FavoriteList extends Vue {
-  private videoWidth = videos.videoWidth
-  private videoHeight = videos.videoHeight
+export default class FavoriteList extends mixins(Processing) {
+  private videoWidth = videoConstants.videoWidth
+  private videoHeight = videoConstants.videoHeight
   private favoriteList: Favorite[] = []
   // TODO: この書き方はイケテいないので、いつか修正する
   private favoriteVideoIdForRemoving: string = ''
@@ -45,23 +46,27 @@ export default class FavoriteList extends Vue {
   }
 
   private async fetchFavoriteList() {
+    this.startProcessing()
     try {
       await favoriteStore.fetchFavorites()
       this.favoriteList = favoriteStore.getFavorites
     } catch (error) {
       alert(error)
     }
+    this.endProcessing()
   }
 
   private async clickRemoveFavoriteIcon() {
+    this.startProcessing()
     try {
       await favoriteStore.removeFavorite(this.favoriteVideoIdForRemoving)
       alert('削除しました')
-      // TODO: this.favoriteListから動画データを削除する
+      // TODO: 表示用のデータを更新：this.favoriteListから動画データを削除する
       this.closeConfirmDialog()
     } catch (error) {
       alert(error)
     }
+    this.endProcessing()
   }
 
   private openConfirmDialog(favoriteVideoId: string) {
